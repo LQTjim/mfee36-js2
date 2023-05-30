@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        box-sizing: border-box;
+      }
+      .rect {
+        position: relative;
+        width: 600px;
+        height: 600px;
+        background-color: #f9e6e6;
+        border: 1px solid black;
+      }
+      .ball {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background-color: #4f8bec;
+        border: 1px solid black;
+        left: 100px;
+        top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="rect">
+      <div class="ball"></div>
+      <div class="ball" style="left: 150px"></div>
+    </div>
+
+    <script>
+      const rect = document.querySelector(".rect");
+      const ball = document.querySelector(".ball");
+
+      const handler1 = (event) => {
+        // 註冊事件的對象 event.currentTarget
+        console.log(1, event.currentTarget);
+        // 事件的來源元素 event.target
+        console.log(2, event.target);
+      };
+      rect.addEventListener("click", handler1);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //循環結構JSON.stringify無法拷貝
+      const p1 = {
+        name: "john",
+      };
+      const p2 = {
+        name: "bill",
+      };
+      const p3 = {
+        name: "ken",
+      };
+
+      p1.next = p2;
+      p2.next = p3;
+      p3.next = p1;
+      let q1;
+      try {
+        q1 = JSON.stringify(p1);
+      } catch (ex) {
+        console.log(ex);
+      }
+
+      // 比較好的深層複製的方式
+      q1 = structuredClone(p1);
+    </script>
+  </body>
+</html>

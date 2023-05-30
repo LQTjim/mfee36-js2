@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .btn.active {
+        background-color: rgb(117, 11, 11);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col" id="btn-container">
+          <a type="button" id="price_asc" class="btn btn-primary">price asc</a>
+          <a type="button" id="price_desc" class="btn btn-primary"
+            >price desc</a
+          >
+          <a type="button" id="author_asc" class="btn btn-primary"
+            >author asc</a
+          >
+          <a type="button" id="author_desc" class="btn btn-primary"
+            >author desc</a
+          >
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr class="table-primary">
+                <th scope="col">#</th>
+                <th scope="col">書名</th>
+                <th scope="col">作者</th>
+                <th scope="col">頁數</th>
+                <th scope="col">價格</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="data/products1.js"></script>
+    <script>
+      let sortFunc = () => {};
+      let usp = new URLSearchParams(location.search);
+      const btnContainer = document.querySelector("#btn-container");
+      const classActiveToggle = function (x) {
+        btnContainer.querySelectorAll("a").forEach((el) => {
+          el.classList.remove("active");
+        });
+        if (x) {
+          btnContainer.querySelector(`#${x}`).classList.add("active");
+        }
+        return;
+      };
+      const returnSortFunction = function (x) {
+        switch (x) {
+          case "price_asc":
+            sortFunc = (a, b) => {
+              return a.price - b.price;
+            };
+            break;
+          case "price_desc":
+            sortFunc = (a, b) => {
+              return -a.price + b.price;
+            };
+            break;
+          case "author_asc":
+            sortFunc = (a, b) => {
+              return a.author < b.author ? -1 : 1;
+            };
+            break;
+          case "author_desc":
+            sortFunc = (a, b) => {
+              return a.author > b.author ? -1 : 1;
+            };
+            break;
+          default:
+            break;
+        }
+      };
+
+      const renderdata = function () {
+        let str = "";
+        let copyData = [...products1];
+        copyData.sort(sortFunc);
+        copyData.forEach(({ id, author, bookname, pages, price }) => {
+          str += `
+      <tr>
+          <td>${id}</td>
+          <td>${bookname}</td>
+          <td>${author}</td>
+          <td>${pages}</td>
+          <td>${price}</td>
+      </tr>
+      `;
+        });
+        document.querySelector("tbody").innerHTML = str;
+      };
+      const changeURL = function (x) {
+        var url = window.location.toString();
+        window.history.pushState("", "", `?orderby=${x}`);
+      };
+      classActiveToggle(usp.get("orderby"));
+      returnSortFunction(usp.get("orderby"));
+      renderdata();
+      /* document.querySelector("#author-asc");
+      document.querySelector("#author-desc");
+      document.querySelector("#price-desc");
+      document.querySelector("#author-desc"); */
+      //不換頁排列資料 被按得按鈕要ACTIVE
+      /* orderby
+price_asc
+price_desc
+author_asc
+author_desc */
+
+      btnContainer.addEventListener("click", (e) => {
+        classActiveToggle(e.target.id);
+        returnSortFunction(e.target.id);
+        changeURL(e.target.id);
+        renderdata();
+      });
+      window.onpopstate = () => {
+        usp = new URLSearchParams(location.search);
+        classActiveToggle(usp.get("orderby"));
+        returnSortFunction(usp.get("orderby"));
+        renderdata();
+      };
+    </script>
+  </body>
+</html>
