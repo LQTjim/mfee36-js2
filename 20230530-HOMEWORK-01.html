@@ -17,11 +17,16 @@
   </head>
   <body>
     <div class="container">
-      <!-- <div class="row">
+      <div class="row">
         <div class="input-group my-3">
-          <input type="text" class="form-control" placeholder="請輸入關鍵字" />
+          <input
+            type="text"
+            id="search"
+            class="form-control"
+            placeholder="請輸入關鍵字"
+          />
         </div>
-      </div> -->
+      </div>
       <div class="row">
         <div class="col" id="btn-container">
           <a type="button" id="price_asc" class="btn btn-primary">price asc</a>
@@ -58,8 +63,15 @@
     <script src="data/products1.js"></script>
     <script>
       let sortFunc = () => {};
+      let filterFunction = () => true;
       let usp = new URLSearchParams(location.search);
+      const search = document.querySelector("#search");
       const btnContainer = document.querySelector("#btn-container");
+      let timer;
+      const throttle = (func, ms) => {
+        clearTimeout(timer);
+        timer = setTimeout(func, ms);
+      };
       const classActiveToggle = function (x) {
         btnContainer.querySelectorAll("a").forEach((el) => {
           el.classList.remove("active");
@@ -95,42 +107,74 @@
             break;
         }
       };
+      const returnFilterFunction = function () {
+        const keyword = search.value.trim();
+        if (!!keyword) {
+          filterFunction = (el) =>
+            el.bookname.includes(keyword) || el.author.includes(keyword);
+        } else {
+          filterFunction = (el) => true;
+        }
+      };
 
       const renderdata = function () {
         let str = "";
+        const tbody = document.querySelector("tbody");
+        tbody.innerHTML = str;
         let copyData = [...products1];
         copyData.sort(sortFunc);
-        copyData.forEach(({ id, author, bookname, pages, price }) => {
+        const filterCopyData = copyData.filter(filterFunction);
+        if (filterCopyData.length === 0) {
+          console.log("123");
+          str +=
+            '<tr><td colspan="5" class="text-center">抱歉,您的搜尋內容不存在</tr>';
+          tbody.innerHTML = str;
+          return;
+        }
+        console.log(456);
+        filterCopyData.forEach(({ id, author, bookname, pages, price }) => {
           str += `
-      <tr>
-          <td>${id}</td>
-          <td>${bookname}</td>
-          <td>${author}</td>
-          <td>${pages}</td>
-          <td>${price}</td>
-      </tr>
-      `;
+            <tr>
+                <td>${id}</td>
+                <td>${bookname}</td>
+                <td>${author}</td>
+                <td>${pages}</td>
+                <td>${price}</td>
+            </tr>
+            `;
         });
-        document.querySelector("tbody").innerHTML = str;
+        tbody.innerHTML = str;
       };
-      const changeURL = function (x) {
-        var url = window.location.toString();
-        window.history.pushState("", "", `?orderby=${x}`);
+      const changeURL = function (sort, search) {
+        // var url = window.location.toString();
+        let sortParams = sort ? `orderby=${sort}` : "";
+        let searchParams = search ? `orderby=${search}` : "";
+        window.history.pushState("", "", `?orderby=${sort}`);
       };
       classActiveToggle(usp.get("orderby"));
       returnSortFunction(usp.get("orderby"));
       renderdata();
       /* document.querySelector("#author-asc");
-      document.querySelector("#author-desc");
-      document.querySelector("#price-desc");
-      document.querySelector("#author-desc"); */
+            document.querySelector("#author-desc");
+            document.querySelector("#price-desc");
+            document.querySelector("#author-desc"); */
       //不換頁排列資料 被按得按鈕要ACTIVE
       /* orderby
-price_asc
-price_desc
-author_asc
-author_desc */
-
+      price_asc
+      price_desc
+      author_asc
+      author_desc */
+      search.addEventListener("input", (e) => {
+        if (!e.target.value) {
+          returnFilterFunction(e.target.value);
+          renderdata();
+          return;
+        }
+        throttle(() => {
+          returnFilterFunction(e.target.value);
+          renderdata();
+        }, 1000);
+      });
       btnContainer.addEventListener("click", (e) => {
         classActiveToggle(e.target.id);
         returnSortFunction(e.target.id);
