@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" id="myin" onchange="loadImg(event)" accept="image/*" />
+    <img src="" alt="" id="myimg" width="300px" />
+
+    <script>
+      function getDataURLFromFile(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            resolve(reader.result);
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+      /*
+      async function loadImg(event) {
+        myimg.src = await getDataURLFromFile( event.currentTarget.files[0] );
+      }
+      */
+
+      function loadImg(event) {
+        getDataURLFromFile(event.currentTarget.files[0]).then((r) => {
+          myimg.src = r;
+        });
+      }
+    </script>
+  </body>
+</html>

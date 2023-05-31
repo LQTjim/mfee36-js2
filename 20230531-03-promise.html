@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const promise1 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // 如果成功
+          // resolve('abc');
+
+          // 如果失敗
+          reject(new Error("error message"));
+        }, 1500);
+      });
+      promise1
+        .then((a) => {
+          console.log(a);
+        })
+        .catch((ex) => {
+          console.log(Object.getOwnPropertyDescriptors(ex));
+          console.log(ex.stack);
+        });
+      /*
+        new Promise((resolve, reject)=>{
+            setTimeout(()=>{
+                // 如果成功
+                // resolve('abc');
+
+                // 如果失敗
+                reject('def');
+            }, 1500);
+        }).then((a)=>{
+            console.log(a);
+        }).catch(ex=>{
+            console.log(ex);
+        })
+        */
+    </script>
+  </body>
+</html>

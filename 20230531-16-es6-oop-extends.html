@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      class Person {
+        constructor(name, age) {
+          this.name = name;
+          this.age = age;
+        }
+        getInfo() {
+          return `${this.name} : ${this.age}`;
+        }
+        toString() {
+          return JSON.stringify(this);
+        }
+      }
+
+      class Employee extends Person {
+        #id;
+        constructor(id, name, age) {
+          super(name, age);
+          this.#id = id;
+        }
+        getInfo() {
+          return super.getInfo() + ` : ${this.#id}`; //用super呼叫原本的方法
+        }
+      }
+
+      const 員工1 = new Employee("A001", "David", 23);
+
+      console.log(員工1 + "");
+      console.log(員工1 instanceof Person);
+      console.log(員工1 instanceof Employee);
+      console.log(員工1.getInfo());
+    </script>
+  </body>
+</html>

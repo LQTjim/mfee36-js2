@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      "use strict";
+      class Person {
+        gender = "male";
+
+        #eid;
+
+        constructor(name, age) {
+          this.name = name;
+          this.age = age;
+          this.#eid = "A001";
+        }
+
+        getInfo() {
+          return `${this.name} : ${this.gender} : ${this.age}`;
+        }
+
+        // override 覆寫原有的功能
+        toString() {
+          return JSON.stringify(this);
+        }
+
+        // getter: 讀取器
+        get eid() {
+          console.log("讀取器");
+          return this.#eid;
+        }
+        // setter: 設定器
+        set eid(v) {
+          console.log("設定器");
+          this.#eid = v;
+        }
+      }
+
+      var p1 = new Person("Peter", 25);
+
+      console.log(p1.getInfo());
+      console.log(p1.toString());
+      console.log(p1 + "");
+      console.log(p1.name);
+    </script>
+  </body>
+</html>

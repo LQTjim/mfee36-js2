@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" id="myin" onchange="loadImg()" accept="image/*" />
+    <img src="" alt="" id="myimg" width="300px" />
+
+    <script>
+      // const myin = document.querySelector('#myin');
+
+      // function loadImg(){
+      //     const file = myin.files[0];  // File 類型
+
+      //     const reader = new FileReader();
+
+      //     // 先定義事件處理器
+      //     reader.onload = ()=>{
+      //         myimg.src = reader.result;
+      //     };
+
+      //     // 讀取檔案
+      //     reader.readAsDataURL(file);
+
+      // }
+      const myin = document.querySelector("#myin");
+      function loadImg() {
+        const file = myin.files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+          myimg.src = reader.result;
+          console.log(reader);
+          console.log(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    </script>
+  </body>
+</html>
