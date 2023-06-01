@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+      import { b } from "./tools/my-js01.js";
+
+      import { b as otherB } from "./tools/my-js02.js";
+      import { b as b3 } from "./tools/my-js02.js";
+      //這邊是要測試import是SHARE同一份reference
+      otherB.myAttr = "泥好";
+      console.log(b3(3)); //27
+      console.log(b3 === otherB); //true
+      console.log(b3.myAttr); //'泥好'
+
+      const obj = { name: "Daphne", age: 26 };
+      const { name: newName } = obj; //解構賦值的naming方法
+      console.log({ newName });
+    </script>
+  </body>
+</html>
